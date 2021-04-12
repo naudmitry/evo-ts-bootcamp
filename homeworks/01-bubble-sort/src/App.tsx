@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import './App.css';
-import {bubbleSortInit, bubbleSortStep} from "./bubleSort";
+import {bubbleSortInit, bubbleSortStep, convertArrayToData} from "./bubleSort";
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import {Chart, BarSeries, Title, ArgumentAxis} from '@devexpress/dx-react-chart-material-ui';
 import {Animation} from "@devexpress/dx-react-chart";
 
@@ -16,22 +18,23 @@ export interface IState {
     i: number;
     j: number;
     done: boolean;
+    data: any[];
     timer: NodeJS.Timeout;
 }
 
 class App extends Component<IProps, IState> {
     componentWillUnmount() {
-        // clearInterval(this.state.timer!);
+        clearInterval(this.state.timer!);
     }
 
-    handleClick = () => {
+    private handleClick = () => {
         this.setState({
             ...bubbleSortInit(this.props.array),
-            timer: setInterval(() => this.handleTimer(), 250)
+            timer: setInterval(() => this.handleTimer(), 1000)
         });
     };
 
-    handleTimer = () => {
+    private handleTimer = () => {
         this.setState(oldState => {
             const newState = bubbleSortStep(oldState) as IState;
             if (newState.done) {
@@ -43,28 +46,23 @@ class App extends Component<IProps, IState> {
 
     render() {
         return (
-            <div className="App">
-                <Paper>
-                    <Chart
-                        data={[
-                            { key: "1", value: 2.525 },
-                            { key: "2", value: 3.018 },
-                            { key: "3", value: 3.682 },
-                            { key: "4", value: 4.44 },
-                            { key: "5", value: 5.31 },
-                            { key: "6", value: 6.127 },
-                            { key: "7", value: 6.93 }
-                        ]}
-                    >
-                        <ArgumentAxis/>
-                        <BarSeries
-                            valueField="value"
-                            argumentField="key"
-                        />
-                        <Title text="Bubble sort"/>
-                        <Animation/>
-                    </Chart>
-                </Paper>
+            <div className="App" ref={React.createRef()}>
+                <Box width={1 / 4} className="Container">
+                    <Paper>
+                        <Chart data={this.state? this.state.data : convertArrayToData(this.props.array)}>
+                            <ArgumentAxis/>
+                            <BarSeries
+                                valueField="value"
+                                argumentField="key"
+                            />
+                            <Title text="Bubble sort"/>
+                            <Animation/>
+                        </Chart>
+                        <Button color="primary" onClick={this.handleClick}>
+                            Sort
+                        </Button>
+                    </Paper>
+                </Box>
             </div>
         );
     }

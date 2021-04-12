@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App array={[10, 20, 30, 40, 50, 60]} />
+    <App array={[60, 20, 30, 40, 50, 10]} />
   </React.StrictMode>,
   document.getElementById('root')
 );

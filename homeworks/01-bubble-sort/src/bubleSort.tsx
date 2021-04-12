@@ -8,7 +8,8 @@ export function bubbleSortInit(array: number[]): IState {
         i: array.length - 1,
         j: 0,
         done: false,
-        timer: setInterval(() => {}, 250)
+        timer: setInterval(() => {}, 1000),
+        data: convertArrayToData(array)
     };
 }
 
@@ -41,5 +42,19 @@ export function bubbleSortStep(state: IState): Partial<IState> {
         comparisons,
         i,
         j,
+        data: convertArrayToData(array)
     };
+}
+
+export function convertArrayToData(array: number[]) {
+    let data: any[] = [];
+
+    array.forEach((value, index) => {
+        data.push({
+            key: index.toString(),
+            value
+        })
+    });
+
+    return data;
 }
